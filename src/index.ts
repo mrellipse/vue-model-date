@@ -58,14 +58,13 @@ function createOptions() {
             el.addEventListener('change', ($event: Event) => {
 
                 let value: string = (<HTMLInputElement>$event.target).value;
-
+                
                 if (value) {
                     let date = helper.adjustDate(helper.parse(value), helper.currentDate);
 
                     if (date && !helper.equal(helper.currentDate, date))
                         helper.updateModel(date);
                 } else if (value === '') {
-                    el.value = '';
                     helper.updateModel(null);
                 }
             });

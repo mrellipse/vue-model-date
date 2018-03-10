@@ -8,6 +8,7 @@ export class DateFnsFormatter implements IDateHelper {
     }
 
     adjustDate(leftDate: Date, rightDate: Date): Date {
+        rightDate = rightDate || new Date();
         var diff = differenceInCalendarDays(leftDate, rightDate);
         return diff === 0 ? null : addDays(rightDate, diff);
     }

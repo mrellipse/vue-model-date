@@ -2,7 +2,7 @@ import Vue, { VNodeDirective } from 'vue';
 import { IDateHelper, isDateHelperMixin } from './date-helper';
 
 export function isDirectiveOptions(value: any): value is IDirectiveOptions {
-    return value['value'] && (typeof value['value'] === 'string' || value['value'] instanceof Date);
+    return value && value['value'] && (typeof value['value'] === 'string' || value['value'] instanceof Date);
 }
 
 export interface IDirectiveOptions {

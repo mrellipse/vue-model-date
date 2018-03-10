@@ -1,6 +1,6 @@
 {
   "name": "vue-model-date",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "A directive to handle binding between date input elements, and data model properties defined on a vue component instance",
   "main": "lib/index.js",
   "files": [
