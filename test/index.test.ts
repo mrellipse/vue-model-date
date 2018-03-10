@@ -312,5 +312,19 @@ describe("Directive@Vue-Model-Date", () => {
 
             assert.isTrue(target.dataset.hasNativeSupport === '0' || target.dataset.hasNativeSupport === '1');
         });
+
+        it("sets model value to null when value is cleared", () => {
+
+            const vm = setup(defaultDate, templateInputDate).$mount();
+
+            const target = <HTMLInputElement>vm.$el;
+            target.value = ''; // value has been cleared
+
+            dispatchEvent(vm.$el, 'change');
+
+            return vm.$nextTick().then(() => {
+                assert.isNull(vm.myDate);
+            });
+        });
     })
 });
