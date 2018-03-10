@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "allowJs": false,
+    "baseUrl": "node_modules",
+    "declaration": true,
+    "experimentalDecorators": true,
+    "lib": [
+      "dom",
+      "es2015"
+    ],
+    "listEmittedFiles": false,
+    "module": "commonjs",
+    "moduleResolution": "Node",
+    "outDir": "./lib",
+    "sourceMap": true,
+    "target": "es5",
+    "traceResolution": true,
+    "types": []
+  },
+  "exclude": [
+    "bin",
+    "lib",
+    "lib-esm",
+    "node_modules",
+    "test"
+  ]
+}

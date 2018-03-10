@@ -1,0 +1,53 @@
+{
+  "name": "vue-model-date",
+  "version": "1.0.0",
+  "description": "A directive to handle binding between date input elements, and data model properties defined on a vue component instance",
+  "main": "lib/index.js",
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mrellipse/vue-model-date.git"
+  },
+  "keywords": [
+    "vue",
+    "model",
+    "date",
+    "input",
+    "binding"
+  ],
+  "author": "mrellipse",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mrellipse/vue-model-date.git"
+  },
+  "homepage": "https://github.com/mrellipse/vue-model-date.git",
+  "scripts": {
+    "build": "npm run clean && npm run compile",
+    "clean": "powershell rm lib-esm/* -recurse&& powershell rm lib/* -recurse&& powershell rm _bundles/* -recurse",
+    "compile": "webpack --config ./src/webpack.publish.js && tsc -p ./tsconfig.json && tsc -p ./tsconfig.json -m es6 --outDir lib-esm",
+    "test": "cd ./test && \"../node_modules/.bin/mocha-webpack.cmd\" --require jsdom-global/register --webpack-config ./webpack.config.js --glob \"*.test.js\" *.ts",
+    "watch": "cd ./test && \"../node_modules/.bin/mocha-webpack.cmd\" --watch --require jsdom-global/register --webpack-config ./webpack.config.js --glob \"*.test.js\" *.ts"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.0.1",
+    "@types/mocha": "^2.2.41",
+    "@types/node": "^8.0.7",
+    "chai": "^4.0.2",
+    "jsdom-global": "^3.0.2",
+    "mocha": "^3.4.2",
+    "mocha-webpack": "^1.0.1",
+    "ts-loader": "^3.5.0",
+    "ts-node": "^3.1.0",
+    "typescript": "^2.7.2",
+    "vue": "^2.2.0",
+    "vue-template-compiler": "^2.3.4",
+    "webidl-conversions": "^4.0.1",
+    "webpack": "^3.11.0",
+    "webpack-node-externals": "^1.6.0"
+  },
+  "dependencies": {
+    "date-fns": "^2.0.0-alpha.7"
+  }
+}
