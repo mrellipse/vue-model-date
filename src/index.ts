@@ -43,29 +43,43 @@ function createOptions() {
     let inserted = (el: HTMLInputElement, binding: VNodeDirective, vnode: VNode, oldVnode: VNode) => {
 
         let helper = createHelper(el, binding, vnode);
+        let ignoreChangeEvent = false;
 
         if (helper !== null) {
             let context = vnode.context;
             let expression = binding.expression;
 
-            if (helper.currentDate) {
+            if (helper.currentDate){
                 el.value = helper.format(helper.currentDate);
                 el.valueAsDate = helper.currentDate;
             }
 
             el.dataset.hasNativeSupport = hasNativeSupport() ? '0' : '1';
 
+            context.$watch(() => context[expression], (newValue, oldValue) => {
+
+                if (newValue != helper.currentDate) {
+                    ignoreChangeEvent = true;
+                    helper.currentDate = newValue;
+                    el.value = newValue === null ? '' : helper.format(newValue);
+                    el.valueAsDate = helper.currentDate;
+                    context.$nextTick(() => ignoreChangeEvent = false);
+                }
+            });
+
             el.addEventListener('change', ($event: Event) => {
 
-                let value: string = (<HTMLInputElement>$event.target).value;
-                
-                if (value) {
-                    let date = helper.adjustDate(helper.parse(value), helper.currentDate);
+                if (!ignoreChangeEvent) {
+                    let value: string = (<HTMLInputElement>$event.target).value;
 
-                    if (date && !helper.equal(helper.currentDate, date))
-                        helper.updateModel(date);
-                } else if (value === '') {
-                    helper.updateModel(null);
+                    if (value) {
+                        let date = helper.adjustDate(helper.parse(value), helper.currentDate);
+
+                        if (date && !helper.equal(helper.currentDate, date))
+                            helper.updateModel(date);
+                    } else if (value === '') {
+                        helper.updateModel(null);
+                    }
                 }
             });
         }

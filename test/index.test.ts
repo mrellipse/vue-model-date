@@ -326,5 +326,19 @@ describe("Directive@Vue-Model-Date", () => {
                 assert.isNull(vm.myDate);
             });
         });
+
+        it("updates target element value when model changes", () => {
+
+            let now = new Date();
+            const vm = setup(defaultDate, templateInputDate).$mount();
+
+            const target = <HTMLInputElement>vm.$el;
+            
+            vm.myDate = now;
+
+            return vm.$nextTick().then(() => {
+                assert.equal(target.valueAsDate, now, target.value);
+            });
+        });
     })
 });
