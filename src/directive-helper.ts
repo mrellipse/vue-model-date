@@ -7,6 +7,7 @@ export function isDirectiveOptions(value: any): value is IDirectiveOptions {
 
 export interface IDirectiveOptions {
     value: string | Date;
+    bindingExpression: string;
     pattern?: string;
     adjustDate?: (leftDate: Date, rightDate: Date) => Date;
     equal?: (leftDate: Date, rightDate: Date) => boolean;
@@ -20,21 +21,13 @@ export class DirectiveHelper implements IDateHelper {
     private current: Date = null;
     private hooks: Map<string, Function> = null;
     private strategy: (value: Date) => void;
+    private watch: () => any = null;
 
-    private buildUpdateStrategy(binding: VNodeDirective, context: Vue) {
-
-        let data = binding.value;
-
-        if (isDirectiveOptions(data))
-            return (value: Date) => {
-                context.$set(<any>context, <string>data.value, value)
-                context.$emit('input', value);
-            };
-        else
-            return (value: Date) => {
-                context[binding.expression] = value;
-                context.$emit('input', value);
-            }
+    constructor(public helper: IDateHelper, binding: VNodeDirective, context: Vue, value: Date) {
+        this.currentDate = value;
+        this.hooks = this.buildHooks(binding, context);
+        this.strategy = this.buildUpdateStrategy(binding, context);
+        this.watch = this.buildWatchExpression(binding, context);
     }
 
     private buildHooks(binding: VNodeDirective, context: Vue): Map<string, Function> {
@@ -52,10 +45,36 @@ export class DirectiveHelper implements IDateHelper {
         return map;
     }
 
-    constructor(public helper: IDateHelper, binding: VNodeDirective, context: Vue, value: Date) {
-        this.currentDate = value;
-        this.hooks = this.buildHooks(binding, context);
-        this.strategy = this.buildUpdateStrategy(binding, context);
+    private buildUpdateStrategy(binding: VNodeDirective, context: Vue) {
+
+        let data = binding.value;
+
+        if (isDirectiveOptions(data))
+            return (value: Date) => {
+                context.$set(<any>context, <string>data.value, value)
+                context.$emit('input', value);
+            };
+        else
+            return (value: Date) => {
+                context[binding.expression] = value;
+                context.$emit('input', value);
+            }
+    }
+
+    private buildWatchExpression(binding: VNodeDirective, context: Vue) {
+
+        return () => {
+            let data = binding.value;
+
+            if (isDirectiveOptions(data) && typeof data.value === 'string')
+                return context[data.value];
+            else
+                return context[binding.expression];
+        };
+    }
+
+    public get watchExpression() {
+        return this.watch;
     }
 
     public get currentDate(): Date {

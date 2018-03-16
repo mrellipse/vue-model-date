@@ -56,7 +56,7 @@ function createOptions() {
 
             el.dataset.hasNativeSupport = hasNativeSupport() ? '0' : '1';
 
-            context.$watch(() => context[expression], (newValue, oldValue) => {
+            context.$watch(helper.watchExpression, (newValue, oldValue) => {
 
                 if (newValue != helper.currentDate) {
                     ignoreChangeEvent = true;

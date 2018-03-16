@@ -327,7 +327,7 @@ describe("Directive@Vue-Model-Date", () => {
             });
         });
 
-        it("updates target element value when model changes", () => {
+        it("updates target element value when bound to vm property", () => {
 
             let now = new Date();
             const vm = setup(defaultDate, templateInputDate).$mount();
@@ -335,6 +335,33 @@ describe("Directive@Vue-Model-Date", () => {
             const target = <HTMLInputElement>vm.$el;
             
             vm.myDate = now;
+
+            return vm.$nextTick().then(() => {
+                assert.equal(target.valueAsDate, now, target.value);
+            });
+        });
+
+        it("updates target element value when bound to vm object", () => {
+
+            let now = new Date();
+            let vm = new Vue({
+                template: `<input type="text" v-model-date="settings"/>`,
+                directives: {
+                    'model-date': VueModelDate
+                },
+                data: () => {
+                    return {
+                        from: defaultDate,
+                        settings: {
+                            value: 'from'
+                        }
+                    }
+                }
+            }).$mount();
+
+            const target = <HTMLInputElement>vm.$el;
+            
+            vm.from = now;
 
             return vm.$nextTick().then(() => {
                 assert.equal(target.valueAsDate, now, target.value);
